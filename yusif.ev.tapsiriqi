@@ -1,0 +1,108 @@
+﻿using System;
+using System.Reflection.Emit;
+using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+
+namespace Money
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+
+            pictureBox1.Visible = false;
+            pictureBox2.Visible = false;
+            pictureBox3.Visible = false;
+            pictureBox4.Visible = false;
+            pictureBox5.Visible = false;
+            pictureBox6.Visible = false;
+            pictureBox7.Visible = false;
+            pictureBox8.Visible = false;
+
+            label1.Visible = false;
+            label2.Visible = false;
+            label3.Visible = false;
+            label4.Visible = false;
+            label5.Visible = false;
+            label6.Visible = false;
+            label7.Visible = false;
+            label8.Visible = false;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            errorProvider1.Clear();
+
+            if (string.IsNullOrWhiteSpace(textBox1.Text))
+            {
+                errorProvider1.SetError(textBox1, "Məbləğ daxil edin");
+                return;
+            }
+
+            if (!int.TryParse(textBox1.Text, out int mebleg))
+            {
+                errorProvider1.SetError(textBox1, "Məbləğ daxil edin");
+                return;
+            }
+
+            if (mebleg <= 0)
+            {
+                MessageBox.Show(
+                    "Mənfi və ya sıfır məbləğ xırdalanmaz",
+                    "Diqqət",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+                return;
+            }
+
+            int[] nominatlar = { 500, 200, 100, 50, 20, 10, 5, 1 };
+
+            PictureBox[] sekiller =
+            {
+                pictureBox8,
+                pictureBox7,
+                pictureBox6,
+                pictureBox5,
+                pictureBox4,
+                pictureBox3,
+                pictureBox2,
+                pictureBox1
+            };
+
+            Label[] labellar =
+            {
+                label8,
+                label7,
+                label6,
+                label5,
+                label4,
+                label3,
+                label2,
+                label1
+            };
+
+            for (int i = 0; i < 8; i++)
+            {
+                sekiller[i].Visible = false;
+                labellar[i].Visible = false;
+                labellar[i].Text = "";
+            }
+
+            for (int i = 0; i < nominatlar.Length; i++)
+            {
+                int say = mebleg / nominatlar[i];
+
+                if (say > 0)
+                {
+                    mebleg %= nominatlar[i];
+
+                    sekiller[i].Visible = true;
+                    labellar[i].Visible = true;
+                    labellar[i].Text = say.ToString();
+                }
+            }
+        }
+    }
+}
